@@ -2,17 +2,16 @@
   "buildCommand": "npm run build --workspace=apps/web",
   "outputDirectory": "apps/web/dist",
   "functions": {
-    "apps/api/src/functions/*.ts": {
-      "maxDuration": 30
-    }
+    "api/*.ts": { "maxDuration": 30 },
+    "api/agent/[id].ts": { "maxDuration": 30 }
   },
   "rewrites": [
-    { "source": "/remember",   "destination": "/apps/api/src/functions/remember" },
-    { "source": "/recall",     "destination": "/apps/api/src/functions/recall" },
-    { "source": "/analyze",    "destination": "/apps/api/src/functions/analyze" },
-    { "source": "/discover",   "destination": "/apps/api/src/functions/discover" },
-    { "source": "/registry",   "destination": "/apps/api/src/functions/registry" },
-    { "source": "/agent/:id",  "destination": "/apps/api/src/functions/profile" }
+    { "source": "/remember",  "destination": "/api/remember" },
+    { "source": "/recall",    "destination": "/api/recall" },
+    { "source": "/analyze",   "destination": "/api/analyze" },
+    { "source": "/discover",  "destination": "/api/discover" },
+    { "source": "/registry",  "destination": "/api/registry" },
+    { "source": "/agent/:id", "destination": "/api/agent/:id" }
   ],
   "headers": [
     {
