@@ -39,3 +39,6 @@ pnpm-debug.log*
 # AI Agent Context
 .agents/
 AGENTS.md
+
+# Demo Scripts
+demo.sh
