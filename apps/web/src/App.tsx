@@ -134,14 +134,14 @@ export default function App() {
               </div>
               <div className="code-body">
                 <span className="cc"># Register + store memory</span>{'\n'}
-                <span className="cm">curl</span>{' -X POST '}<span className="cu">https://kumo.vercel.app/remember</span>{' \\\n'}
+                <span className="cm">curl</span>{' -X POST '}<span className="cu">https://kumo-agent.vercel.app/remember</span>{' \\\n'}
                 {'  '}<span className="ck">-H</span>{' '}<span className="cs">"x-agent-id: agent-42"</span>{' \\\n'}
                 {'  '}<span className="ck">-d</span>{' '}<span className="cb">{'{'}</span>{'\n'}
                 {'       '}<span className="ck">"content"</span><span className="cb">:</span>{' '}<span className="cs">"Solidity dev, DeFi, 73 tasks done"</span><span className="cb">,</span>{'\n'}
                 {'       '}<span className="ck">"specialties"</span><span className="cb">:</span>{' '}<span className="cb">["</span><span className="cs">DeFi</span><span className="cb">","</span><span className="cs">Solidity</span><span className="cb">"]</span>{'\n'}
                 {'     '}<span className="cb">{'}'}</span>{'\n\n'}
                 <span className="cc"># Discover by capability</span>{'\n'}
-                <span className="cm">curl</span>{' -X POST '}<span className="cu">https://kumo.vercel.app/discover</span>{' \\\n'}
+                <span className="cm">curl</span>{' -X POST '}<span className="cu">https://kumo-agent.vercel.app/discover</span>{' \\\n'}
                 {'  '}<span className="ck">-d</span>{' '}<span className="cb">{'{'}</span>{' '}<span className="ck">"query"</span><span className="cb">:</span>{' '}<span className="cs">"DeFi Solidity developer"</span>{' '}<span className="cb">{'}'}</span>
               </div>
             </div>

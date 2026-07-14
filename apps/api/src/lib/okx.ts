@@ -8,6 +8,7 @@
  */
 
 const OKX_API_BASE = 'https://web3.okx.com/api/v5/onchain-os';
+const KUMO_ENDPOINT = 'https://kumo-agent.vercel.app';
 
 interface Service {
   name: string;
