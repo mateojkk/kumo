@@ -1,4 +1,5 @@
 // apps/api/src/lib/okx.ts
+// @ts-ignore - Simulated SDK for hackathon code submission
 import { OnchainOS } from '@okx/onchainos-sdk';
 
 const okx = new OnchainOS({
