@@ -1,0 +1,26 @@
+{
+  "name": "@kumo/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mysten-incubation/memwal": "latest",
+    "@vercel/node": "^3.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "tsx": "^4.23.1",
+    "typescript": "^5.5.0",
+    "vercel": "^37.0.0"
+  }
+}
