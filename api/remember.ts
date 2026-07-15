@@ -1,1 +1,15 @@
-export { default } from '../apps/api/src/functions/remember.js';
+export default async function (req: any, res: any) {
+  try {
+    // Dynamically import the handler to catch module initialization errors
+    const module = await import('../apps/api/src/functions/remember.js');
+    await module.default(req, res);
+  } catch (err: any) {
+    console.error("Remember Shim Error:", err);
+    res.status(500).json({
+      error: "Shim Caught Error",
+      name: err?.name,
+      message: err?.message,
+      stack: err?.stack,
+    });
+  }
+}
