@@ -6,8 +6,8 @@ export async function getMemwal() {
     );
   }
 
-  // Bypass Vercel esbuild's CJS bundling to force a native ESM import
-  const { MemWal } = await new Function('return import("@mysten-incubation/memwal")')();
+  // Use standard dynamic import. We will force Vercel to output ESM via api/package.json
+  const { MemWal } = await import("@mysten-incubation/memwal");
   
   return MemWal.create({
     key: process.env.MEMWAL_DELEGATE_KEY,
