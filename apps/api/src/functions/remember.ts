@@ -60,7 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Register / update agent in Kumo registry
-    const entry = upsertAgent({
+    const entry = await upsertAgent({
       namespaceId: namespace,
       agentId,
       name,

@@ -39,7 +39,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const clampedLimit = Math.min(Math.max(1, Number(limit)), 50);
-  const agents = getAllAgents();
+  const agents = await getAllAgents();
 
   if (agents.length === 0) {
     return res.status(200).json({

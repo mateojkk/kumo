@@ -19,7 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { id } = req.query as { id: string };
   if (!id) return res.status(400).json({ error: "Agent namespace ID is required" });
 
-  const entry = getAgent(id);
+  const entry = await getAgent(id);
   if (!entry) {
     return res.status(404).json({
       error: "Agent not found in Kumo registry",
