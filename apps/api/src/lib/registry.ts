@@ -11,7 +11,7 @@
  * and then fans out to search their individual namespaces.
  */
 
-import { memwal } from "./memwal.js";
+import { getMemwal } from "./memwal.js";
 
 export interface RegistryEntry {
   namespaceId: string;       // The agent's MemWal namespace
@@ -25,6 +25,7 @@ export interface RegistryEntry {
 }
 
 export async function upsertAgent(entry: Omit<RegistryEntry, "registeredAt" | "lastSeen" | "memoryCount"> & { memoryCount?: number }): Promise<RegistryEntry> {
+  const memwal = await getMemwal();
   const now = new Date().toISOString();
   
   const updated: RegistryEntry = {
@@ -44,6 +45,7 @@ export async function upsertAgent(entry: Omit<RegistryEntry, "registeredAt" | "l
 }
 
 export async function getAllAgents(): Promise<RegistryEntry[]> {
+  const memwal = await getMemwal();
   // Decentralized fetch: Ask MemWal for the top 50 registered agents
   const results = await memwal.recall({
     query: "Agent Profile Namespace",
