@@ -9,10 +9,11 @@
  */
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { memwal } from "../lib/memwal.js";
+import { getMemwal } from "../lib/memwal.js";
 import { getAgent } from "../lib/registry.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const memwal = await getMemwal();
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 

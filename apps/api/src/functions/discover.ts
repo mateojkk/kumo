@@ -24,11 +24,12 @@
  */
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { memwal } from "../lib/memwal.js";
+import { getMemwal } from "../lib/memwal.js";
 import { getAllAgents } from "../lib/registry.js";
 import { rankAgents, type MemoryHit } from "../lib/ranking.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const memwal = await getMemwal();
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
