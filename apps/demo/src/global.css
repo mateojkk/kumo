@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #000;
+  color: #fff;
+}
+
+.terminal-window {
+  width: 1400px;
+  height: 800px;
+  background: rgba(15, 15, 20, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terminal-header {
+  height: 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  position: relative;
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.dot-red { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green { background: #27c93f; }
+
+.terminal-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.terminal-body {
+  padding: 30px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Syntax Highlighting */
+.cmd-prompt { color: #10b981; margin-right: 12px; font-weight: bold; }
+.cmd-text { color: #f8fafc; }
+.cmd-arg { color: #60a5fa; }
+.cmd-string { color: #f59e0b; }
+.cmd-json-key { color: #a78bfa; }
+.cmd-json-val { color: #34d399; }
+.cmd-json-str { color: #fbbf24; }
+.cmd-comment { color: #64748b; font-style: italic; }
+
+.bg-mesh {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%);
+  z-index: 0;
+}
