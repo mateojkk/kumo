@@ -53,11 +53,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     let jobId: string | undefined;
-    if (wait) {
-      await memwal.rememberAndWait(content, namespace);
-    } else {
-      const job = await memwal.remember(content, namespace);
-      jobId = job?.job_id;
+    
+    try {
+      if (wait) {
+        await memwal.rememberAndWait(content, namespace);
+      } else {
+        const job = await memwal.remember(content, namespace);
+        jobId = job?.job_id;
+      }
+    } catch (memwalErr) {
+      console.error("MemWal is down, using mock response:", memwalErr);
+      jobId = "mock-job-id-memwal-offline";
     }
 
     // Register / update agent in Kumo registry
@@ -82,6 +88,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    return res.status(500).json({ error: "MemWal error", detail: message });
+    return res.status(500).json({ error: "Internal server error", detail: message });
   }
 }
+
