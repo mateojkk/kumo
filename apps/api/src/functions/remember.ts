@@ -22,8 +22,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getMemwal } from "../lib/memwal.js";
 import { upsertAgent } from "../lib/registry.js";
+import { withX402 } from "../lib/x402.js";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const memwal = await getMemwal();
   // Handle CORS preflight
   if (req.method === "OPTIONS") return res.status(200).end();
@@ -92,3 +93,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 }
 
+export default withX402(coreHandler);

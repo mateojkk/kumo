@@ -17,7 +17,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getMemwal } from "../lib/memwal.js";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+import { withX402 } from "../lib/x402.js";
+
+async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const memwal = await getMemwal();
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -63,4 +65,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: "Internal server error", detail: message });
   }
 }
+
+export default withX402(coreHandler);
 
