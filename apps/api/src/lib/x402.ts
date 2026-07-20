@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const X402_AMOUNT = "0.001";
+const X402_AMOUNT = "0.01";
 const X402_TOKEN = "USDT";
 const X402_ADDRESS = "0x43da1e912bccbdb5bc7db853814d5ad310f61ad4"; // Kumo Agentic Wallet
 
