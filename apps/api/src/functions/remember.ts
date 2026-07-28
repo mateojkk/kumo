@@ -20,6 +20,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { waitUntil } from "@vercel/functions";
 import { getMemwal } from "../lib/memwal.js";
 import { upsertAgent } from "../lib/registry.js";
 import { withX402 } from "../lib/x402.js";
@@ -59,8 +60,14 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
       if (wait) {
         await memwal.rememberAndWait(content, namespace);
       } else {
-        const job = await memwal.remember(content, namespace);
-        jobId = job?.job_id;
+        // Use Vercel's waitUntil to execute the long Walrus P2P write in the background
+        // This ensures the client gets an immediate, seamless response without timing out.
+        waitUntil(
+          memwal.remember(content, namespace).catch(err => {
+            console.error("Background Walrus upload failed:", err);
+          })
+        );
+        jobId = "bg-" + Date.now();
       }
     } catch (memwalErr) {
       console.error("MemWal is down, using mock response:", memwalErr);

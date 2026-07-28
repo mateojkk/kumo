@@ -15,6 +15,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { waitUntil } from "@vercel/functions";
 import { getMemwal } from "../lib/memwal.js";
 
 import { withX402 } from "../lib/x402.js";
@@ -42,11 +43,14 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
         const result = await memwal.analyzeAndWait(content, { namespace });
         facts = result.facts;
         jobIds = result.results.map(r => r.id);
-      } else {
-        const result = await memwal.analyze(content, { namespace });
-        facts = result.facts;
-        jobIds = result.job_ids;
-      }
+        // Use Vercel's waitUntil to execute the long analyze job in the background
+        waitUntil(
+          memwal.analyze(content, { namespace }).catch(err => {
+            console.error("Background Walrus analyze failed:", err);
+          })
+        );
+        facts = [];
+        jobIds = ["bg-" + Date.now()];
     } catch (memwalErr) {
       console.error("MemWal is down, using mock response:", memwalErr);
       facts = ["Mocked fact extraction since MemWal is offline."];
