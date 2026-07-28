@@ -6,12 +6,12 @@
     }
   },
   "rewrites": [
-    { "source": "/remember",     "destination": "/src/functions/remember" },
-    { "source": "/recall",       "destination": "/src/functions/recall" },
-    { "source": "/analyze",      "destination": "/src/functions/analyze" },
-    { "source": "/discover",     "destination": "/src/functions/discover" },
-    { "source": "/registry",     "destination": "/src/functions/registry" },
-    { "source": "/agent/:id",    "destination": "/src/functions/profile" }
+    { "source": "/api/remember",     "destination": "/src/functions/remember" },
+    { "source": "/api/recall",       "destination": "/src/functions/recall" },
+    { "source": "/api/analyze",      "destination": "/src/functions/analyze" },
+    { "source": "/api/discover",     "destination": "/src/functions/discover" },
+    { "source": "/api/registry",     "destination": "/src/functions/registry" },
+    { "source": "/api/agent/:id",    "destination": "/src/functions/profile" }
   ],
   "headers": [
     {
