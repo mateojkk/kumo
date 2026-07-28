@@ -6,12 +6,12 @@
     "api/agent/[id].ts": { "maxDuration": 30 }
   },
   "rewrites": [
-    { "source": "/api/remember",  "destination": "/api/remember" },
-    { "source": "/api/recall",    "destination": "/api/recall" },
-    { "source": "/api/analyze",   "destination": "/api/analyze" },
-    { "source": "/api/discover",  "destination": "/api/discover" },
-    { "source": "/api/registry",  "destination": "/api/registry" },
-    { "source": "/api/agent/:id", "destination": "/api/agent/:id" }
+    { "source": "/remember",  "destination": "/api/remember" },
+    { "source": "/recall",    "destination": "/api/recall" },
+    { "source": "/analyze",   "destination": "/api/analyze" },
+    { "source": "/discover",  "destination": "/api/discover" },
+    { "source": "/registry",  "destination": "/api/registry" },
+    { "source": "/agent/:id", "destination": "/api/agent/:id" }
   ],
   "headers": [
     {
