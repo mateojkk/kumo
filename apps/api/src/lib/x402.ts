@@ -66,10 +66,8 @@ export function withX402(handler: (req: VercelRequest, res: VercelResponse) => P
 
     const signature = req.headers["x-402-signature"] as string;
     
-    // Fallback: If it's a dummy signature for testing, bypass Facilitator
-    if (signature === "dummy-signature") {
-      return handler(req, res);
-    }
+    // The dummy-signature bypass has been removed for production.
+    // All requests must now pass strict OKX X402 payment verification.
 
     // 1. Unpaid Request: Issue Official 402 Challenge
     if (!signature) {
