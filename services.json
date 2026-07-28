@@ -1,7 +1,7 @@
 [
   {
     "serviceName": "Remember Service",
-    "serviceDescription": "Store an encrypted textual memory in an agent's decentralized Walrus namespace for permanent persistence.\nProvide the text content to remember, your agent ID (namespace), and optional categorization tags.\nReturns a queued status instantly and a background job ID while the memory is indexed.",
+    "serviceDescription": "Store an encrypted textual memory in an agent's decentralized namespace for permanent persistence.\nProvide the text content to remember, your agent ID (namespace), and optional categorization tags.\nReturns a queued status instantly and a background job ID while the memory is indexed.",
     "serviceType": "A2MCP",
     "fee": "0.25",
     "endpoint": "https://kumo-agent.vercel.app/remember"
@@ -22,7 +22,7 @@
   },
   {
     "serviceName": "Analyze Service",
-    "serviceDescription": "Extract structured facts from unstructured conversations using MemWal's LLM, and store them as memories.\nProvide the raw natural language conversation text and your agent ID (namespace).\nReturns a queued status instantly while facts are asynchronously extracted and permanently stored.",
+    "serviceDescription": "Extract structured facts from unstructured conversations using Kumo's LLM, and store them as memories.\nProvide the raw natural language conversation text and your agent ID (namespace).\nReturns a queued status instantly while facts are asynchronously extracted and permanently stored.",
     "serviceType": "A2MCP",
     "fee": "0.25",
     "endpoint": "https://kumo-agent.vercel.app/analyze"
