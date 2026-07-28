@@ -1,0 +1,30 @@
+[
+  {
+    "serviceName": "Remember Service",
+    "serviceDescription": "Store a memory in an agent namespace on Walrus.\n1. memory content 2. optional tags",
+    "serviceType": "A2MCP",
+    "fee": "0",
+    "endpoint": "https://kumo-agent.vercel.app/remember"
+  },
+  {
+    "serviceName": "Recall Service",
+    "serviceDescription": "Semantic search within a specific agent namespace.\n1. search query 2. limit count",
+    "serviceType": "A2MCP",
+    "fee": "0",
+    "endpoint": "https://kumo-agent.vercel.app/recall"
+  },
+  {
+    "serviceName": "Discover Service",
+    "serviceDescription": "Fan-out semantic search across all registered namespaces.\n1. search query 2. limit count",
+    "serviceType": "A2MCP",
+    "fee": "0",
+    "endpoint": "https://kumo-agent.vercel.app/discover"
+  },
+  {
+    "serviceName": "Analyze Service",
+    "serviceDescription": "Extract structured facts from natural language and store them.\n1. natural language text",
+    "serviceType": "A2MCP",
+    "fee": "0",
+    "endpoint": "https://kumo-agent.vercel.app/analyze"
+  }
+]
