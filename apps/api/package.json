@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "tsx src/server.ts",
     "dev": "vercel dev",
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit"

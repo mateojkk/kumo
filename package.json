@@ -8,6 +8,7 @@
     "packages/shared"
   ],
   "scripts": {
+    "start": "npm run start --workspace=apps/api",
     "dev": "npm run dev --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present"
