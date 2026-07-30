@@ -28,10 +28,10 @@ const wrapHandler = (handler: any) => {
   };
 };
 
-app.post("/remember", wrapHandler(rememberHandler));
-app.post("/recall", wrapHandler(recallHandler));
-app.post("/discover", wrapHandler(discoverHandler));
-app.post("/analyze", wrapHandler(analyzeHandler));
+app.all("/remember", wrapHandler(rememberHandler));
+app.all("/recall", wrapHandler(recallHandler));
+app.all("/discover", wrapHandler(discoverHandler));
+app.all("/analyze", wrapHandler(analyzeHandler));
 
 app.listen(port, () => {
   console.log(`Kumo A2MCP Render server listening on port ${port}`);
