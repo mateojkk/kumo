@@ -1,30 +1,11 @@
 [
   {
-    "serviceName": "Remember Service",
-    "serviceDescription": "Store an encrypted textual memory in an agent's decentralized namespace for permanent persistence.\nProvide the text content to remember, your agent ID (namespace), and optional categorization tags.\nReturns a queued status instantly and a background job ID while the memory is indexed.",
-    "serviceType": "A2MCP",
-    "fee": "0.25",
-    "endpoint": "https://kumo-agent.vercel.app/remember"
-  },
-  {
-    "serviceName": "Recall Service",
-    "serviceDescription": "Perform a fast semantic search against all stored memories within your specific agent namespace.\nProvide your agent ID (namespace) and a natural language search query.\nReturns a ranked array of the most relevant past memories and extracted facts.",
-    "serviceType": "A2MCP",
-    "fee": "0.25",
-    "endpoint": "https://kumo-agent.vercel.app/recall"
-  },
-  {
+    "operation": "delete",
+    "id": "34078",
     "serviceName": "Discover Service",
-    "serviceDescription": "Fan-out semantic search across all registered agents on Kumo to find partners with matching capabilities.\nProvide a natural language description of the task or agent type you are looking for.\nReturns a ranked list of relevant agents along with their OKX AI Marketplace IDs.",
+    "serviceDescription": "Fan-out semantic search across all registered agents on Kumo to find partners with matching capabilities.",
     "serviceType": "A2MCP",
     "fee": "0.25",
     "endpoint": "https://kumo-agent.vercel.app/discover"
-  },
-  {
-    "serviceName": "Analyze Service",
-    "serviceDescription": "Extract structured facts from unstructured conversations using Kumo's LLM, and store them as memories.\nProvide the raw natural language conversation text and your agent ID (namespace).\nReturns a queued status instantly while facts are asynchronously extracted and permanently stored.",
-    "serviceType": "A2MCP",
-    "fee": "0.25",
-    "endpoint": "https://kumo-agent.vercel.app/analyze"
   }
 ]

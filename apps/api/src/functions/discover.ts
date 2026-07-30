@@ -44,7 +44,9 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "query (string) is required" });
   }
 
-  const clampedLimit = Math.min(Math.max(1, Number(limit)), 50);
+  const parsedLimit = parseInt(String(limit), 10);
+  const safeLimit = isNaN(parsedLimit) ? 10 : parsedLimit;
+  const clampedLimit = Math.min(Math.max(1, safeLimit), 50);
   const agents = await getAllAgents();
 
   if (agents.length === 0) {

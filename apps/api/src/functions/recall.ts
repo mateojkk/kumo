@@ -25,6 +25,8 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const query = body.query || body.data?.query || body.params?.query || body.payload?.query;
   const namespace = body.namespace || body.data?.namespace || body.params?.namespace || body.payload?.namespace;
   const limit = body.limit || body.data?.limit || body.params?.limit || 5;
+  let parsedLimit = parseInt(String(limit), 10);
+  if (isNaN(parsedLimit)) parsedLimit = 5;
 
   if (!query || typeof query !== "string") {
     return res.status(400).json({ error: "query (string) is required" });
@@ -36,7 +38,7 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
     });
   }
 
-  const clampedLimit = Math.min(Math.max(1, Number(limit)), 20);
+  const clampedLimit = Math.min(Math.max(1, parsedLimit), 20);
 
   try {
     let results: any[] = [];

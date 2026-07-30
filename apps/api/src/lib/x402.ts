@@ -64,7 +64,7 @@ export function withX402(handler: (req: VercelRequest, res: VercelResponse) => P
       });
     }
 
-    const paymentHeader = req.headers["payment-signature"] as string;
+    const paymentHeader = (req.headers["payment-signature"] || req.headers["x-402-signature"]) as string;
 
     let paymentPayload: any;
     if (paymentHeader) {
