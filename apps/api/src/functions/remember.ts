@@ -39,15 +39,14 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
     });
   }
 
-  const {
-    content,
-    namespace    = agentId,
-    tags         = [],
-    name,
-    description,
-    specialties  = [],
-    wait         = false,
-  } = req.body ?? {};
+  const body = req.body ?? {};
+  const content = body.content || body.data?.content || body.params?.content || body.payload?.content;
+  const tags = body.tags || body.data?.tags || body.params?.tags || [];
+  const wait = body.wait ?? body.data?.wait ?? body.params?.wait ?? false;
+  const namespace = body.namespace || agentId;
+  const name = body.name;
+  const description = body.description;
+  const specialties = body.specialties || [];
 
   if (!content || typeof content !== "string") {
     return res.status(400).json({ error: "content (string) is required" });

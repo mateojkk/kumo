@@ -25,7 +25,10 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { content, namespace, wait = false } = req.body ?? {};
+  const body = req.body ?? {};
+  const content = body.content || body.text || body.data?.text || body.params?.text || body.payload?.text;
+  const namespace = body.namespace || body.data?.namespace || body.params?.namespace || body.payload?.namespace;
+  const wait = body.wait ?? false;
 
   if (!content || typeof content !== "string") {
     return res.status(400).json({ error: "content (string) is required" });

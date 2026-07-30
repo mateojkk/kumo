@@ -21,7 +21,10 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { query, namespace, limit = 5 } = req.body ?? {};
+  const body = req.body ?? {};
+  const query = body.query || body.data?.query || body.params?.query || body.payload?.query;
+  const namespace = body.namespace || body.data?.namespace || body.params?.namespace || body.payload?.namespace;
+  const limit = body.limit || body.data?.limit || body.params?.limit || 5;
 
   if (!query || typeof query !== "string") {
     return res.status(400).json({ error: "query (string) is required" });
