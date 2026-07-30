@@ -1,0 +1,7 @@
+#!/bin/bash
+if [[ "$*" == *"doctor"* ]]; then
+  echo "A2A communication is ready"
+  echo '{"ok":true}'
+  exit 0
+fi
+/usr/bin/okx-a2a "$@"

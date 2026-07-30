@@ -19,6 +19,7 @@ import { waitUntil } from "@vercel/functions";
 import { getMemwal } from "../lib/memwal.js";
 
 import { withX402 } from "../lib/x402.js";
+import { extractField } from "../lib/extract.js";
 
 async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const memwal = await getMemwal();
@@ -26,8 +27,8 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const body = req.body ?? {};
-  const content = body.content || body.text || body.data?.text || body.params?.text || body.payload?.text;
-  const namespace = body.namespace || body.data?.namespace || body.params?.namespace || body.payload?.namespace;
+  const content = extractField(body, 'content') || extractField(body, 'text');
+  const namespace = extractField(body, 'namespace');
   const wait = body.wait ?? false;
 
   if (!content || typeof content !== "string") {

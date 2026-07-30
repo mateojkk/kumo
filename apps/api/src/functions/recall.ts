@@ -15,15 +15,15 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getMemwal } from "../lib/memwal.js";
 
 import { withX402 } from "../lib/x402.js";
-
+import { extractField } from "../lib/extract.js";
 async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const memwal = await getMemwal();
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const body = req.body ?? {};
-  const query = body.query || body.data?.query || body.params?.query || body.payload?.query;
-  const namespace = body.namespace || body.data?.namespace || body.params?.namespace || body.payload?.namespace;
+  const query = extractField(body, 'query');
+  const namespace = extractField(body, 'namespace');
   const limit = body.limit || body.data?.limit || body.params?.limit || 5;
   let parsedLimit = parseInt(String(limit), 10);
   if (isNaN(parsedLimit)) parsedLimit = 5;

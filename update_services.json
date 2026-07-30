@@ -3,10 +3,10 @@
     "operation": "update",
     "id": 34076,
     "serviceName": "Remember Service",
-    "serviceDescription": "1. Store an encrypted textual memory in a decentralized namespace for permanent persistence.\n2. Provide the text content to remember, your agent ID, and optional categorization tags.\n3. Returns a queued status instantly and a background job ID while the memory is indexed.",
+    "serviceDescription": "1. Store an encrypted textual memory in an agent's decentralized namespace for permanent persistence.\n2. Provide the text content to remember, your agent ID (namespace), and optional categorization tags.\n3. Returns a queued status instantly and a background job ID while the memory is indexed.",
     "serviceType": "A2MCP",
     "fee": "0.25",
-    "endpoint": "https://kumo-agent.vercel.app/remember"
+    "endpoint": "https://kumo-bq3c.onrender.com/remember"
   },
   {
     "operation": "update",
@@ -15,27 +15,33 @@
     "serviceDescription": "1. Perform a fast semantic search against all stored memories within your specific agent namespace.\n2. Provide your agent ID (namespace) and a natural language search query.\n3. Returns a ranked array of the most relevant past memories and extracted facts.",
     "serviceType": "A2MCP",
     "fee": "0.25",
-    "endpoint": "https://kumo-agent.vercel.app/recall"
+    "endpoint": "https://kumo-bq3c.onrender.com/recall"
   },
   {
     "operation": "update",
+    "id": 34079,
+    "serviceName": "Analyze Service",
+    "serviceDescription": "1. Extract structured facts from unstructured conversations using MemWal's LLM, and store them as memories.\n2. Provide the raw natural language conversation text and your agent ID (namespace).\n3. Returns a queued status instantly while facts are asynchronously extracted and permanently stored.",
+    "serviceType": "A2MCP",
+    "fee": "0.25",
+    "endpoint": "https://kumo-bq3c.onrender.com/analyze"
+  },
+  {
+    "operation": "update",
+    "id": 38275,
+    "serviceName": "Core Discover",
+    "serviceDescription": "1. Fan-out semantic search across all registered agents on Kumo to find partners with matching capabilities.\n2. Provide a natural language description of the task or agent type you are looking for.\n3. Returns a ranked list of relevant agents along with their OKX AI Marketplace IDs.",
+    "serviceType": "A2MCP",
+    "fee": "0.25",
+    "endpoint": "https://kumo-bq3c.onrender.com/discover"
+  },
+  {
+    "operation": "delete",
     "id": 34078,
     "serviceName": "Discover Service",
     "serviceDescription": "1. Fan-out semantic search across all registered agents on Kumo to find partners with matching capabilities.\n2. Provide a natural language description of the task or agent type you are looking for.\n3. Returns a ranked list of relevant agents along with their OKX AI Marketplace IDs.",
     "serviceType": "A2MCP",
     "fee": "0.25",
     "endpoint": "https://kumo-agent.vercel.app/discover"
-  },
-  {
-    "operation": "update",
-    "id": 34079,
-    "serviceName": "Analyze Service",
-    "serviceDescription": "1. Extract structured facts from unstructured conversations using MemWal LLM, and store them as memories.\n2. Provide the raw natural language conversation text and your agent ID (namespace).\n3. Returns a queued status instantly while facts are asynchronously extracted and permanently stored.",
-    "serviceType": "A2MCP",
-    "fee": "0.25",
-    "endpoint": "https://kumo-agent.vercel.app/analyze"
-  },
-  {"operation": "delete", "id": 34410},
-  {"operation": "delete", "id": 34411},
-  {"operation": "delete", "id": 34412}
+  }
 ]

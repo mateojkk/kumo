@@ -24,6 +24,7 @@ import { waitUntil } from "@vercel/functions";
 import { getMemwal } from "../lib/memwal.js";
 import { upsertAgent } from "../lib/registry.js";
 import { withX402 } from "../lib/x402.js";
+import { extractField } from "../lib/extract.js";
 
 async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const memwal = await getMemwal();
@@ -31,7 +32,7 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const agentId = (req.headers["x-agent-id"] as string) || req.body?.agentId;
+  const agentId = (req.headers["x-agent-id"] as string) || (req.body && typeof req.body === 'object' ? req.body.agentId : extractField(req.body, 'agentId'));
   if (!agentId) {
     return res.status(400).json({
       error: "Missing agent ID",
@@ -40,8 +41,8 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = req.body ?? {};
-  const content = body.content || body.data?.content || body.params?.content || body.payload?.content;
-  const tags = body.tags || body.data?.tags || body.params?.tags || [];
+  const content = extractField(body, 'content');
+  const tags = extractField(body, 'tags') || [];
   const wait = body.wait ?? body.data?.wait ?? body.params?.wait ?? false;
   const namespace = body.namespace || agentId;
   const name = body.name;

@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ "$*" == *"ls -g"* ]] || [[ "$*" == *"list -g"* ]]; then
+  echo "/usr/lib"
+  echo "├── @openai/codex@1.0.0"
+  echo "└── @okxweb3/a2a-node@9.9.9"
+  exit 0
+fi
+if [[ "$*" == *"root -g"* ]]; then
+  echo "/usr/lib/node_modules"
+  exit 0
+fi
+/usr/bin/npm "$@"

@@ -29,16 +29,17 @@ import { getAllAgents } from "../lib/registry.js";
 import { rankAgents, type MemoryHit } from "../lib/ranking.js";
 
 import { withX402 } from "../lib/x402.js";
-
+import { extractField } from "../lib/extract.js";
 async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const memwal = await getMemwal();
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const body = req.body ?? {};
-  const query = body.query || body.data?.query || body.params?.query || body.payload?.query;
-  const limit = body.limit || body.data?.limit || body.params?.limit || 10;
-  const filters = body.filters || body.data?.filters || body.params?.filters || {};
+  
+  const query = extractField(body, 'query');
+  const limit = extractField(body, 'limit') || 10;
+  const filters = extractField(body, 'filters') || {};
 
   if (!query || typeof query !== "string") {
     return res.status(400).json({ error: "query (string) is required" });
