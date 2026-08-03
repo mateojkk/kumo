@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { MemWal } from "@mysten-incubation/memwal";
 
 dotenv.config();
 
@@ -150,20 +151,18 @@ let instance: MemWalHardenedAdapter;
 
 export async function getMemwal() {
   if (!instance) {
-    if (!process.env.MEMWAL_DELEGATE_KEY || !process.env.MEMWAL_ACCOUNT_ID) {
+    const key = process.env.MEMWAL_PRIVATE_KEY || process.env.SUI_PRIVATE_KEY;
+    if (!key || !process.env.MEMWAL_ACCOUNT_ID) {
       throw new Error(
-        "Missing MEMWAL_DELEGATE_KEY or MEMWAL_ACCOUNT_ID env vars. " +
+        "Missing MEMWAL_PRIVATE_KEY or MEMWAL_ACCOUNT_ID env vars. " +
         "Get them from https://memory.walrus.xyz dashboard."
       );
     }
     
-    // Use standard dynamic import. We will force Vercel to output ESM via api/package.json
-    const { MemWal } = await import("@mysten-incubation/memwal");
-    
     const client = MemWal.create({
-      key: process.env.MEMWAL_DELEGATE_KEY,
+      key: key,
       accountId: process.env.MEMWAL_ACCOUNT_ID,
-      serverUrl: "https://relayer.memory.walrus.xyz",
+      serverUrl: process.env.MEMWAL_SERVER_URL || "https://relayer.memory.walrus.xyz",
     });
 
     instance = new MemWalHardenedAdapter(client);

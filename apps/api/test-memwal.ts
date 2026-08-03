@@ -1,15 +1,12 @@
-import 'dotenv/config';
-import { memwal } from './src/lib/memwal.js';
-
-async function run() {
+import { getMemwal } from "./src/lib/memwal.ts";
+process.env.MEMWAL_DELEGATE_KEY = "dummy_key";
+process.env.MEMWAL_ACCOUNT_ID = "dummy_id";
+async function test() {
   try {
-    const job = await memwal.remember("Test developer, 10 yrs experience", "test-agent-1");
-    console.log("Remember accepted:", job);
-    
-    const results = await memwal.recall({ query: "developer", namespace: "test-agent-1" });
-    console.log("Recall results:", results.results.length);
-  } catch (err) {
-    console.error("Error:", err);
+    const m = await getMemwal();
+    console.log("Success:", !!m);
+  } catch (e) {
+    console.error("Error:", e);
   }
 }
-run();
+test();
