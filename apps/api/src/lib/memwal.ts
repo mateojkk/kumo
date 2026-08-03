@@ -27,7 +27,8 @@ class WalrusMainnetAdapter {
       throw new Error(`Failed to parse SUI_PRIVATE_KEY: ${e.message}`);
     }
 
-    const client = new SuiClient({ url: getFullnodeUrl("mainnet") });
+    // Use a community RPC node instead of Mysten's deprecated public fullnode
+    const client = new SuiClient({ url: "https://mainnet.sui.rpcpool.com/" });
     this.walrusClient = new WalrusClient({ network: "mainnet", suiClient: client as any });
   }
 
