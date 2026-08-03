@@ -28,7 +28,7 @@ class WalrusMainnetAdapter {
     }
 
     // Use a community RPC node instead of Mysten's deprecated public fullnode
-    const client = new SuiClient({ url: "https://mainnet.sui.rpcpool.com/" });
+    const client = new SuiClient({ url: "https://sui-mainnet-endpoint.blockvision.org" });
     this.walrusClient = new WalrusClient({ network: "mainnet", suiClient: client as any });
   }
 
