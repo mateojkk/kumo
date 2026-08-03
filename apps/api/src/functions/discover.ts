@@ -63,24 +63,16 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   const recallResults = await Promise.allSettled(
     agents.map(async (entry) => {
       let hits: MemoryHit[] = [];
-      try {
-        const memories = await memwal.recall({
-          query,
-          namespace: entry.namespaceId,
-          limit: 5,
-        });
+      const memories = await memwal.recall({
+        query,
+        namespace: entry.namespaceId,
+        limit: 5,
+      });
 
-        hits = memories.results.map((m) => ({
-          content: m.text,
-          score:   1 - m.distance,
-        }));
-      } catch (err) {
-        console.error(`Mocking discovery hit for ${entry.namespaceId} due to MemWal error`);
-        hits = [{
-          content: "Mocked verifiable memory for agent capabilities since MemWal is upgrading.",
-          score: 0.95
-        }];
-      }
+      hits = memories.results.map((m) => ({
+        content: m.text,
+        score:   1 - m.distance,
+      }));
 
       return { entry, memories: hits };
     })

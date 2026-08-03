@@ -43,24 +43,12 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   try {
     let results: any[] = [];
     
-    try {
-      const memories = await memwal.recall({
-        query,
-        namespace,
-        limit: clampedLimit,
-      });
-      results = memories.results;
-    } catch (memwalErr) {
-      console.error("MemWal is down, using mock response:", memwalErr);
-      results = [
-        {
-          id: "mock-memory-id",
-          content: "Mocked memory since MemWal is currently undergoing security upgrades.",
-          metadata: { timestamp: new Date().toISOString() },
-          score: 0.99
-        }
-      ];
-    }
+    const memories = await memwal.recall({
+      query,
+      namespace,
+      limit: clampedLimit,
+    });
+    results = memories.results;
 
     return res.status(200).json({
       namespace,

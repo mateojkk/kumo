@@ -56,22 +56,17 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
   try {
     let jobId: string | undefined;
     
-    try {
-      if (wait) {
-        await memwal.rememberAndWait(content, namespace);
-      } else {
-        // Use Vercel's waitUntil to execute the long Walrus P2P write in the background
-        // This ensures the client gets an immediate, seamless response without timing out.
-        waitUntil(
-          memwal.remember(content, namespace).catch(err => {
-            console.error("Background Walrus upload failed:", err);
-          })
-        );
-        jobId = "bg-" + Date.now();
-      }
-    } catch (memwalErr) {
-      console.error("MemWal is down, using mock response:", memwalErr);
-      jobId = "mock-job-id-memwal-offline";
+    if (wait) {
+      await memwal.rememberAndWait(content, namespace);
+    } else {
+      // Use Vercel's waitUntil to execute the long Walrus P2P write in the background
+      // This ensures the client gets an immediate, seamless response without timing out.
+      waitUntil(
+        memwal.remember(content, namespace).catch(err => {
+          console.error("Background Walrus upload failed:", err);
+        })
+      );
+      jobId = "bg-" + Date.now();
     }
 
     // Register / update agent in Kumo registry
