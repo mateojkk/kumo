@@ -151,7 +151,7 @@ let instance: MemWalHardenedAdapter;
 
 export async function getMemwal() {
   if (!instance) {
-    const key = process.env.MEMWAL_PRIVATE_KEY || process.env.SUI_PRIVATE_KEY;
+    const key = process.env.MEMWAL_PRIVATE_KEY;
     if (!key || !process.env.MEMWAL_ACCOUNT_ID) {
       throw new Error(
         "Missing MEMWAL_PRIVATE_KEY or MEMWAL_ACCOUNT_ID env vars. " +
