@@ -1,118 +1,172 @@
-// Walrus Mainnet Authenticated SDK Adapter
-import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { WalrusClient } from "@mysten/walrus";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const localIndex = new Map<string, string[]>();
+class MemWalHardenedAdapter {
+  private memwalClient: any;
 
-class WalrusMainnetAdapter {
-  private walrusClient;
-  private signer;
-
-  constructor() {
-    const rawKey = process.env.SUI_PRIVATE_KEY;
-    if (!rawKey) {
-      throw new Error("Missing SUI_PRIVATE_KEY in .env");
-    }
-
-    try {
-      // The CLI keystore exports base64 strings with a 1-byte flag prefix (0x00 for ed25519)
-      const secretKey = new Uint8Array(Buffer.from(rawKey, "base64")).slice(1);
-      this.signer = Ed25519Keypair.fromSecretKey(secretKey);
-      console.log(`[Walrus-Mainnet] Initialized with wallet: ${this.signer.toSuiAddress()}`);
-    } catch(e: any) {
-      throw new Error(`Failed to parse SUI_PRIVATE_KEY: ${e.message}`);
-    }
-
-    // Use a community RPC node instead of Mysten's deprecated public fullnode
-    const client = new SuiClient({ url: "https://sui-mainnet-endpoint.blockvision.org" });
-    this.walrusClient = new WalrusClient({ network: "mainnet", suiClient: client as any });
+  constructor(memwalClient: any) {
+    this.memwalClient = memwalClient;
   }
 
   async remember(content: string, namespace: string) {
-    console.log(`[Walrus-Mainnet] Uploading to Walrus for namespace: ${namespace}`);
-    try {
-      const blob = new TextEncoder().encode(content);
-      let res: any;
-      let lastErr: any;
-      
-      // Retry loop to harden Walrus direct P2P writes
-      for (let attempt = 1; attempt <= 3; attempt++) {
-        try {
-          res = await this.walrusClient.writeBlob({ blob, epochs: 2, deletable: true, signer: this.signer as any });
-          break; // Success
-        } catch (err: any) {
-          lastErr = err;
-          console.warn(`[Walrus-Mainnet] Upload attempt ${attempt} failed:`, err.message);
-          if (attempt < 3) {
-            const backoff = Math.pow(2, attempt) * 1000;
-            console.log(`[Walrus-Mainnet] Retrying in ${backoff}ms...`);
-            await new Promise(resolve => setTimeout(resolve, backoff));
-          }
+    console.log(`[MemWal SDK] remember for namespace: ${namespace}`);
+    let res: any;
+    let lastErr: any;
+    
+    // Retry loop to harden API writes
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        res = await this.memwalClient.remember(content, namespace);
+        break; // Success
+      } catch (err: any) {
+        lastErr = err;
+        console.warn(`[MemWal SDK] Upload attempt ${attempt} failed:`, err.message);
+        if (attempt < 3) {
+          const backoff = Math.pow(2, attempt) * 1000;
+          console.log(`[MemWal SDK] Retrying in ${backoff}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoff));
         }
       }
-
-      if (!res) {
-        throw new Error(`Failed to upload after 3 attempts. Last error: ${lastErr?.message}`);
-      }
-
-      if (res.blobId) {
-        const arr = localIndex.get(namespace) || [];
-        arr.push(res.blobId);
-        localIndex.set(namespace, arr);
-        console.log(`[Walrus-Mainnet] Success! Blob ID: ${res.blobId}`);
-        return { id: res.blobId, job_id: res.blobId };
-      } else {
-        throw new Error("Finished but no Blob ID was returned");
-      }
-    } catch(err: any) {
-      console.error("[Walrus-Mainnet] Upload Failed:", err.message);
-      throw err;
     }
+
+    if (!res) {
+      throw new Error(`Failed to upload after 3 attempts. Last error: ${lastErr?.message}`);
+    }
+    
+    console.log(`[MemWal SDK] Success! Job ID: ${res.job_id || res.id || 'unknown'}`);
+    return res;
   }
   
   async rememberAndWait(content: string, namespace: string) {
-    return this.remember(content, namespace);
-  }
-
-  async recall({ query, namespace, limit }: { query?: string, namespace: string, limit?: number }) {
-    console.log(`[Walrus-Mainnet] Recalling from namespace: ${namespace}`);
-    const blobIds = localIndex.get(namespace) || [];
-    const results = [];
+    console.log(`[MemWal SDK] rememberAndWait for namespace: ${namespace}`);
+    let res: any;
+    let lastErr: any;
     
-    for (const blobId of blobIds) {
+    // Retry loop to harden API writes
+    for (let attempt = 1; attempt <= 3; attempt++) {
       try {
-        const data = await this.walrusClient.readBlob({ blobId });
-        const content = new TextDecoder().decode(data);
-        if (!query || content.toLowerCase().includes(query.toLowerCase())) {
-          results.push({ text: content, id: blobId, distance: 0 });
+        res = await this.memwalClient.rememberAndWait(content, namespace);
+        break; // Success
+      } catch (err: any) {
+        lastErr = err;
+        console.warn(`[MemWal SDK] Upload attempt ${attempt} failed:`, err.message);
+        if (attempt < 3) {
+          const backoff = Math.pow(2, attempt) * 1000;
+          console.log(`[MemWal SDK] Retrying in ${backoff}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoff));
         }
-      } catch(e: any) {
-        console.error(`Failed to read blob ${blobId}`, e.message);
       }
     }
-    if (limit && results.length > limit) {
-      results.length = limit;
+
+    if (!res) {
+      throw new Error(`Failed to upload after 3 attempts. Last error: ${lastErr?.message}`);
     }
-    return { results };
+    
+    console.log(`[MemWal SDK] Success!`);
+    return res;
   }
 
-  async analyze(content: string, { namespace }: { namespace: string }) {
-    const res = await this.remember(content, namespace);
-    return { analysis: "Walrus Mainnet analysis complete.", facts: [], results: [{ id: res.id }], job_ids: [res.id] };
+  async recall(opts: { query?: string, namespace: string, limit?: number }) {
+    console.log(`[MemWal SDK] recall from namespace: ${opts.namespace}`);
+    let res: any;
+    let lastErr: any;
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        res = await this.memwalClient.recall(opts);
+        break; 
+      } catch (err: any) {
+        lastErr = err;
+        console.warn(`[MemWal SDK] Recall attempt ${attempt} failed:`, err.message);
+        if (attempt < 3) {
+          const backoff = Math.pow(2, attempt) * 1000;
+          console.log(`[MemWal SDK] Retrying in ${backoff}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoff));
+        }
+      }
+    }
+
+    if (!res) {
+      throw new Error(`Failed to recall after 3 attempts. Last error: ${lastErr?.message}`);
+    }
+    return res;
   }
 
-  async analyzeAndWait(content: string, { namespace }: { namespace: string }) {
-    return this.analyze(content, { namespace });
+  async analyze(content: string, opts: { namespace: string }) {
+    console.log(`[MemWal SDK] analyze for namespace: ${opts.namespace}`);
+    let res: any;
+    let lastErr: any;
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        res = await this.memwalClient.analyze(content, opts);
+        break; 
+      } catch (err: any) {
+        lastErr = err;
+        console.warn(`[MemWal SDK] Analyze attempt ${attempt} failed:`, err.message);
+        if (attempt < 3) {
+          const backoff = Math.pow(2, attempt) * 1000;
+          console.log(`[MemWal SDK] Retrying in ${backoff}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoff));
+        }
+      }
+    }
+
+    if (!res) {
+      throw new Error(`Failed to analyze after 3 attempts. Last error: ${lastErr?.message}`);
+    }
+    return res;
+  }
+
+  async analyzeAndWait(content: string, opts: { namespace: string }) {
+    console.log(`[MemWal SDK] analyzeAndWait for namespace: ${opts.namespace}`);
+    let res: any;
+    let lastErr: any;
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        res = await this.memwalClient.analyzeAndWait(content, opts);
+        break; 
+      } catch (err: any) {
+        lastErr = err;
+        console.warn(`[MemWal SDK] Analyze attempt ${attempt} failed:`, err.message);
+        if (attempt < 3) {
+          const backoff = Math.pow(2, attempt) * 1000;
+          console.log(`[MemWal SDK] Retrying in ${backoff}ms...`);
+          await new Promise(resolve => setTimeout(resolve, backoff));
+        }
+      }
+    }
+
+    if (!res) {
+      throw new Error(`Failed to analyze after 3 attempts. Last error: ${lastErr?.message}`);
+    }
+    return res;
   }
 }
 
-let instance: WalrusMainnetAdapter;
+let instance: MemWalHardenedAdapter;
 
 export async function getMemwal() {
-  if (!instance) instance = new WalrusMainnetAdapter();
+  if (!instance) {
+    if (!process.env.MEMWAL_DELEGATE_KEY || !process.env.MEMWAL_ACCOUNT_ID) {
+      throw new Error(
+        "Missing MEMWAL_DELEGATE_KEY or MEMWAL_ACCOUNT_ID env vars. " +
+        "Get them from https://memory.walrus.xyz dashboard."
+      );
+    }
+    
+    // Use standard dynamic import. We will force Vercel to output ESM via api/package.json
+    const { MemWal } = await import("@mysten-incubation/memwal");
+    
+    const client = MemWal.create({
+      key: process.env.MEMWAL_DELEGATE_KEY,
+      accountId: process.env.MEMWAL_ACCOUNT_ID,
+      serverUrl: "https://relayer.memory.walrus.xyz",
+    });
+
+    instance = new MemWalHardenedAdapter(client);
+  }
   return instance;
 }

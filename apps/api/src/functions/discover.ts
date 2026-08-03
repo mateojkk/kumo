@@ -69,7 +69,7 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
         limit: 5,
       });
 
-      hits = memories.results.map((m) => ({
+      hits = memories.results.map((m: any) => ({
         content: m.text,
         score:   1 - m.distance,
       }));

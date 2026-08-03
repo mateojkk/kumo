@@ -45,7 +45,7 @@ async function coreHandler(req: VercelRequest, res: VercelResponse) {
     if (wait) {
       const result = await memwal.analyzeAndWait(content, { namespace });
       facts = result.facts;
-      jobIds = result.results.map(r => r.id);
+      jobIds = result.results.map((r: any) => r.id);
     } else {
       // Use Vercel's waitUntil to execute the long analyze job in the background
       waitUntil(
