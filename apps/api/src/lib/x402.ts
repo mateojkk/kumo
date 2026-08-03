@@ -94,8 +94,8 @@ export function withX402(handler: (req: VercelRequest, res: VercelResponse) => P
     }
 
     // 2. Paid Request: Cryptographically Settled via OKX Facilitator
-    const handlerResult = await handler(req, res);
-
+    // We must build and set the PAYMENT-RESPONSE header BEFORE calling the handler,
+    // because the handler will call res.json() which immediately sends the response!
     if (result.success) {
         try {
             const requirements = await rs.buildPaymentRequirements(resourceConfig);
@@ -109,6 +109,7 @@ export function withX402(handler: (req: VercelRequest, res: VercelResponse) => P
         }
     }
 
+    const handlerResult = await handler(req, res);
     return handlerResult;
   };
 }
